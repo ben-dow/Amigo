@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class ControlSurface {
 
+    
 
     /**
      * Alias method for MidiSystem.getMidiDevice. Fetches the MidiDevice based on an info class
