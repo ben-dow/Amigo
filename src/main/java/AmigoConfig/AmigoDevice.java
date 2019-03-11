@@ -8,6 +8,13 @@ public class AmigoDevice {
     MidiDevice InDevice;
     MidiDevice OutDevice;
 
+
+    /**
+     *
+     * @param InDeviceInfo For Recieveing Data in - Has Max Recievers as 0 and Max Transmitters as -1
+     * @param OutDeviceInfo For sending data out - Has Max Recievers at -1 and Max Transmitters as 0
+     * @throws MidiUnavailableException
+     */
     public AmigoDevice(MidiDevice.Info InDeviceInfo, MidiDevice.Info OutDeviceInfo) throws MidiUnavailableException {
 
         InDevice = MidiSystem.getMidiDevice(InDeviceInfo);
@@ -15,12 +22,19 @@ public class AmigoDevice {
 
         InDevice.getTransmitter().setReceiver(new AmigoReciever(this));
 
+
+
+
+
         InDevice.open();
         OutDevice.open();
 
     }
 
-
+    /**
+     *
+     * @param msg
+     */
     public void IncomingMidiMessage(MidiMessage msg){
         int msg_length = msg.getLength();
         byte[] message = msg.getMessage();
@@ -29,13 +43,18 @@ public class AmigoDevice {
         byte control = message[1];
         byte velocity = message[2];
 
-        SendDeviceMessage(0x90,control, 1);
 
+        SendDeviceMessage(0x90,control, 3);
 
 
     }
 
-
+    /**
+     *
+     * @param status
+     * @param control
+     * @param data
+     */
     public void SendDeviceMessage(int status, int control, int data){
         ShortMessage newMessage = new ShortMessage();
 
@@ -47,6 +66,13 @@ public class AmigoDevice {
             e.printStackTrace();
         } catch (MidiUnavailableException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
+
+    public static MidiDevice.Info[] CollectDevices(){
+
+        return MidiSystem.getMidiDeviceInfo();
+    }
+
 
 }

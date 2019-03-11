@@ -10,13 +10,12 @@ public class Amigo {
     public static void main(String[] args){
 
         try {
-            MidiDevice.Info[] infos  = MidiSystem.getMidiDeviceInfo();
+            MidiDevice.Info[] infos  = AmigoDevice.CollectDevices();
 
             for (MidiDevice.Info i : infos){
                 System.out.println (i.getDescription());
 
             }
-
             AmigoDevice device = new AmigoDevice(infos[3], infos[2]);
         } catch (MidiUnavailableException e) {
             e.printStackTrace();
