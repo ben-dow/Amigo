@@ -1,12 +1,18 @@
 package AmigoConfig;
 
+import AmigoConfig.Components.AmigoComponent;
+import AmigoConfig.Components.BacklightButton;
+import AmigoConfig.Components.Button;
+import AmigoConfig.Components.ColorBacklightButton;
+
 import javax.sound.midi.*;
-import java.util.List;
 
 public class AmigoDevice {
 
     MidiDevice InDevice;
     MidiDevice OutDevice;
+
+    AmigoComponent DeviceState;
 
 
     /**
@@ -22,10 +28,6 @@ public class AmigoDevice {
 
         InDevice.getTransmitter().setReceiver(new AmigoReciever(this));
 
-
-
-
-
         InDevice.open();
         OutDevice.open();
 
@@ -35,17 +37,14 @@ public class AmigoDevice {
      *
      * @param msg
      */
-    public void IncomingMidiMessage(MidiMessage msg){
+    void IncomingMidiMessage(MidiMessage msg){
         int msg_length = msg.getLength();
         byte[] message = msg.getMessage();
 
-        byte status = message[0];
-        byte control = message[1];
-        byte velocity = message[2];
-
-
-        SendDeviceMessage(0x90,control, 3);
-
+        int status = (message[0] & 0xFF);
+        int control = (message[1] & 0xFF);
+        int velocity = (message[2] & 0xFF);
+        
 
     }
 
@@ -59,7 +58,7 @@ public class AmigoDevice {
         ShortMessage newMessage = new ShortMessage();
 
         try {
-            newMessage.setMessage(0x90, control, data);
+            newMessage.setMessage(status, control, data);
             OutDevice.getReceiver().send(newMessage,-1);
 
         } catch (InvalidMidiDataException e) {

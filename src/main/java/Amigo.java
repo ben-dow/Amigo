@@ -11,11 +11,6 @@ public class Amigo {
 
         try {
             MidiDevice.Info[] infos  = AmigoDevice.CollectDevices();
-
-            for (MidiDevice.Info i : infos){
-                System.out.println (i.getDescription());
-
-            }
             AmigoDevice device = new AmigoDevice(infos[3], infos[2]);
         } catch (MidiUnavailableException e) {
             e.printStackTrace();
